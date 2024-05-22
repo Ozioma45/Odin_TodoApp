@@ -70,3 +70,20 @@ h1 {
 #todo-list li button:hover {
   background: #c82333;
 }
+
+/* Add styling for the project section */
+#project-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+#project-select,
+#new-project-input,
+#add-project-btn {
+  margin-right: 10px;
+}
+
+#new-project-input {
+  flex-grow: 1;
+}
