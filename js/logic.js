@@ -30,6 +30,14 @@ export function getTodos() {
   return projects[currentProject];
 }
 
+export function getTodoByIndex(index) {
+  return projects[currentProject][index];
+}
+
+export function updateTodo(index, updatedTask) {
+  projects[currentProject][index] = updatedTask;
+}
+
 export function setCurrentProject(projectName) {
   if (projects[projectName]) {
     currentProject = projectName;

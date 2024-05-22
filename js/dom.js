@@ -6,6 +6,8 @@ import {
   addTodo,
   deleteTodo,
   getTodos,
+  getTodoByIndex,
+  updateTodo,
   setCurrentProject,
 } from "./logic.js";
 
@@ -22,8 +24,27 @@ const checklistItemInput = document.getElementById("checklist-item-input");
 const addChecklistItemBtn = document.getElementById("add-checklist-item-btn");
 const checklist = document.getElementById("checklist");
 const todoList = document.getElementById("todo-list");
+const currentProjectTitle = document.getElementById("current-project-title");
+
+const modal = document.getElementById("modal");
+const closeBtn = document.querySelector(".close-btn");
+const editTitleInput = document.getElementById("edit-title-input");
+const editDescriptionInput = document.getElementById("edit-description-input");
+const editDueDateInput = document.getElementById("edit-due-date-input");
+const editPriorityInput = document.getElementById("edit-priority-input");
+const editNotesInput = document.getElementById("edit-notes-input");
+const editChecklistItemInput = document.getElementById(
+  "edit-checklist-item-input"
+);
+const editAddChecklistItemBtn = document.getElementById(
+  "edit-add-checklist-item-btn"
+);
+const editChecklist = document.getElementById("edit-checklist");
+const saveBtn = document.getElementById("save-btn");
 
 let checklistItems = [];
+let editChecklistItems = [];
+let currentEditIndex = null;
 
 export function updateProjectSelect() {
   projectSelect.innerHTML = "";
@@ -34,23 +55,41 @@ export function updateProjectSelect() {
     projectSelect.appendChild(option);
   }
   projectSelect.value = currentProject;
+  updateProjectList();
+}
+
+export function updateProjectList() {
+  const projectList = document.getElementById("project-list");
+  projectList.innerHTML = "";
+  for (let project in projects) {
+    const listItem = document.createElement("li");
+    listItem.textContent = project;
+    listItem.addEventListener("click", () => {
+      setCurrentProject(project);
+      currentProjectTitle.textContent = project;
+      renderTasks();
+    });
+    projectList.appendChild(listItem);
+  }
 }
 
 export function renderTasks() {
   todoList.innerHTML = "";
-  getTodos().forEach((task) => {
+  getTodos().forEach((task, index) => {
     const listItem = document.createElement("li");
+    listItem.dataset.priority = task.priority;
     listItem.innerHTML = `
             <strong>${task.title}</strong>
-            <p>${task.description}</p>
             <p>Due: ${task.dueDate}</p>
-            <p>Priority: ${task.priority}</p>
-            <p>Notes: ${task.notes}</p>
-            <ul>
-                ${task.checklist.map((item) => `<li>${item}</li>`).join("")}
-            </ul>
+            <button class="edit-btn">Edit</button>
             <button class="delete-btn">Delete</button>
         `;
+
+    const editBtn = listItem.querySelector(".edit-btn");
+    editBtn.addEventListener("click", () => {
+      currentEditIndex = index;
+      openEditModal(task);
+    });
 
     const deleteBtn = listItem.querySelector(".delete-btn");
     deleteBtn.addEventListener("click", () => {
@@ -73,6 +112,7 @@ addProjectBtn.addEventListener("click", () => {
 
 projectSelect.addEventListener("change", () => {
   setCurrentProject(projectSelect.value);
+  currentProjectTitle.textContent = projectSelect.value;
   renderTasks();
 });
 
@@ -109,4 +149,57 @@ addBtn.addEventListener("click", () => {
     checklist.innerHTML = "";
     renderTasks();
   }
+});
+
+function openEditModal(task) {
+  editTitleInput.value = task.title;
+  editDescriptionInput.value = task.description;
+  editDueDateInput.value = task.dueDate;
+  editPriorityInput.value = task.priority;
+  editNotesInput.value = task.notes;
+  editChecklistItems = [...task.checklist];
+  editChecklist.innerHTML = "";
+  editChecklistItems.forEach((item) => {
+    const listItem = document.createElement("li");
+    listItem.textContent = item;
+    editChecklist.appendChild(listItem);
+  });
+  modal.style.display = "block";
+}
+
+closeBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+});
+
+editAddChecklistItemBtn.addEventListener("click", () => {
+  const itemText = editChecklistItemInput.value.trim();
+  if (itemText) {
+    editChecklistItems.push(itemText);
+    const listItem = document.createElement("li");
+    listItem.textContent = itemText;
+    editChecklist.appendChild(listItem);
+    editChecklistItemInput.value = "";
+  }
+});
+
+saveBtn.addEventListener("click", () => {
+  const updatedTask = {
+    title: editTitleInput.value.trim(),
+    description: editDescriptionInput.value.trim(),
+    dueDate: editDueDateInput.value,
+    priority: editPriorityInput.value,
+    notes: editNotesInput.value.trim(),
+    checklist: [...editChecklistItems],
+    status: "Pending",
+    creationDate: getTodoByIndex(currentEditIndex).creationDate,
+  };
+  updateTodo(currentEditIndex, updatedTask);
+  modal.style.display = "none";
+  renderTasks();
 });

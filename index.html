@@ -8,38 +8,72 @@
   </head>
   <body>
     <div class="container">
-      <h1>To-Do List</h1>
-
-      <div id="project-section">
-        <select id="project-select"></select>
-        <input
-          type="text"
-          id="new-project-input"
-          placeholder="New project name" />
-        <button id="add-project-btn">Add Project</button>
+      <div class="sidebar">
+        <h2>Projects</h2>
+        <div id="project-section">
+          <select id="project-select"></select>
+          <input
+            type="text"
+            id="new-project-input"
+            placeholder="New project name" />
+          <button id="add-project-btn">Add Project</button>
+        </div>
+        <ul id="project-list"></ul>
       </div>
-
-      <input type="text" id="title-input" placeholder="Task title" />
-      <textarea
-        id="description-input"
-        placeholder="Task description"></textarea>
-      <input type="date" id="due-date-input" />
-      <select id="priority-input">
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-      </select>
-      <textarea id="notes-input" placeholder="Additional notes"></textarea>
-      <div id="checklist-container">
-        <input
-          type="text"
-          id="checklist-item-input"
-          placeholder="Add checklist item" />
-        <button id="add-checklist-item-btn">Add Checklist Item</button>
-        <ul id="checklist"></ul>
+      <div class="main">
+        <h2 id="current-project-title">Default</h2>
+        <div class="add-todo">
+          <input type="text" id="title-input" placeholder="Task title" />
+          <textarea
+            id="description-input"
+            placeholder="Task description"></textarea>
+          <input type="date" id="due-date-input" />
+          <select id="priority-input">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+          <textarea id="notes-input" placeholder="Additional notes"></textarea>
+          <div id="checklist-container">
+            <input
+              type="text"
+              id="checklist-item-input"
+              placeholder="Add checklist item" />
+            <button id="add-checklist-item-btn">Add Checklist Item</button>
+            <ul id="checklist"></ul>
+          </div>
+          <button id="add-btn">Add Task</button>
+        </div>
+        <ul id="todo-list"></ul>
       </div>
-      <button id="add-btn">Add Task</button>
-      <ul id="todo-list"></ul>
+    </div>
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Edit Todo</h2>
+        <input type="text" id="edit-title-input" placeholder="Task title" />
+        <textarea
+          id="edit-description-input"
+          placeholder="Task description"></textarea>
+        <input type="date" id="edit-due-date-input" />
+        <select id="edit-priority-input">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <textarea
+          id="edit-notes-input"
+          placeholder="Additional notes"></textarea>
+        <div id="edit-checklist-container">
+          <input
+            type="text"
+            id="edit-checklist-item-input"
+            placeholder="Add checklist item" />
+          <button id="edit-add-checklist-item-btn">Add Checklist Item</button>
+          <ul id="edit-checklist"></ul>
+        </div>
+        <button id="save-btn">Save Changes</button>
+      </div>
     </div>
     <script type="module" src="js/main.js"></script>
   </body>
