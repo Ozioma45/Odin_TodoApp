@@ -3,14 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To-Do List App</title>
+    <title>Advanced To-Do List App</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
       <h1>To-Do List</h1>
-      <input type="text" id="todo-input" placeholder="Add a new task" />
-      <button id="add-btn">Add</button>
+      <input type="text" id="title-input" placeholder="Task title" />
+      <textarea
+        id="description-input"
+        placeholder="Task description"></textarea>
+      <input type="date" id="due-date-input" />
+      <select id="priority-input">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      <textarea id="notes-input" placeholder="Additional notes"></textarea>
+      <div id="checklist-container">
+        <input
+          type="text"
+          id="checklist-item-input"
+          placeholder="Add checklist item" />
+        <button id="add-checklist-item-btn">Add Checklist Item</button>
+        <ul id="checklist"></ul>
+      </div>
+      <button id="add-btn">Add Task</button>
       <ul id="todo-list"></ul>
     </div>
     <script src="script.js"></script>
