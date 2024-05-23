@@ -22,7 +22,7 @@
       </div>
       <div class="main">
         <h2 id="current-project-title">Default</h2>
-        <div class="add-todo">
+        <div class="add-todo hide">
           <input type="text" id="title-input" placeholder="Task title" />
           <textarea
             id="description-input"
@@ -45,6 +45,8 @@
           <button id="add-btn">Add Task</button>
         </div>
         <ul id="todo-list"></ul>
+
+        <div id="newTBtn"><button>Add New Task</button></div>
       </div>
     </div>
     <div id="modal" class="modal">
@@ -75,6 +77,6 @@
         <button id="save-btn">Save Changes</button>
       </div>
     </div>
-    <script type="module" src="js/main.js"></script>
+    <script src="dist/bundle.js"></script>
   </body>
 </html>

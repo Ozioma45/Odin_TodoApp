@@ -10,6 +10,7 @@ import {
   updateTodo,
   setCurrentProject,
 } from "./logic.js";
+import { format } from "date-fns";
 
 const projectSelect = document.getElementById("project-select");
 const newProjectInput = document.getElementById("new-project-input");
@@ -80,7 +81,7 @@ export function renderTasks() {
     listItem.dataset.priority = task.priority;
     listItem.innerHTML = `
             <strong>${task.title}</strong>
-            <p>Due: ${task.dueDate}</p>
+            <p>Due: ${format(new Date(task.dueDate), "MM/dd/yyyy")}</p>
             <button class="edit-btn">Edit</button>
             <button class="delete-btn">Delete</button>
         `;
@@ -112,7 +113,7 @@ addProjectBtn.addEventListener("click", () => {
 
 projectSelect.addEventListener("change", () => {
   setCurrentProject(projectSelect.value);
-  currentProjectTitle.textContent = projectSelect.value;
+  currentProjectTitle.textContent = `${projectSelect.value}'s Tasks`;
   renderTasks();
 });
 
