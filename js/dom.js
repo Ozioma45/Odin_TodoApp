@@ -9,6 +9,7 @@ import {
   getTodoByIndex,
   updateTodo,
   setCurrentProject,
+  currentProject,
 } from "./logic.js";
 import { format } from "date-fns";
 
@@ -20,10 +21,6 @@ const titleInput = document.getElementById("title-input");
 const descriptionInput = document.getElementById("description-input");
 const dueDateInput = document.getElementById("due-date-input");
 const priorityInput = document.getElementById("priority-input");
-const notesInput = document.getElementById("notes-input");
-const checklistItemInput = document.getElementById("checklist-item-input");
-const addChecklistItemBtn = document.getElementById("add-checklist-item-btn");
-const checklist = document.getElementById("checklist");
 const todoList = document.getElementById("todo-list");
 const currentProjectTitle = document.getElementById("current-project-title");
 
@@ -33,18 +30,11 @@ const editTitleInput = document.getElementById("edit-title-input");
 const editDescriptionInput = document.getElementById("edit-description-input");
 const editDueDateInput = document.getElementById("edit-due-date-input");
 const editPriorityInput = document.getElementById("edit-priority-input");
-const editNotesInput = document.getElementById("edit-notes-input");
-const editChecklistItemInput = document.getElementById(
-  "edit-checklist-item-input"
-);
-const editAddChecklistItemBtn = document.getElementById(
-  "edit-add-checklist-item-btn"
-);
-const editChecklist = document.getElementById("edit-checklist");
-const saveBtn = document.getElementById("save-btn");
 
-let checklistItems = [];
-let editChecklistItems = [];
+const saveBtn = document.getElementById("save-btn");
+const newTBtn = document.getElementById("newTBtn");
+const addTodoD = document.getElementById("add-todo");
+
 let currentEditIndex = null;
 
 export function updateProjectSelect() {
@@ -61,8 +51,10 @@ export function updateProjectSelect() {
 
 export function updateProjectList() {
   const projectList = document.getElementById("project-list");
+  console.log("Updating Project List"); //TESTING AND TROUBLESHOOTING
   projectList.innerHTML = "";
   for (let project in projects) {
+    console.log("Adding project:", project); //TESTING AND TROUBLESHOOTING
     const listItem = document.createElement("li");
     listItem.textContent = project;
     listItem.addEventListener("click", () => {
@@ -81,6 +73,10 @@ export function renderTasks() {
     listItem.dataset.priority = task.priority;
     listItem.innerHTML = `
             <strong>${task.title}</strong>
+            <p>${task.description}</p>
+            <strong>Priority:<span id='priority'> ${
+              task.priority
+            }</span></strong>
             <p>Due: ${format(new Date(task.dueDate), "MM/dd/yyyy")}</p>
             <button class="edit-btn">Edit</button>
             <button class="delete-btn">Delete</button>
@@ -97,6 +93,15 @@ export function renderTasks() {
       deleteTodo(task);
       renderTasks();
     });
+
+    const priorityMain = listItem.querySelector("#priority");
+    if (task.priority === "High") {
+      priorityMain.classList.add("High");
+    } else if (task.priority === "Medium") {
+      priorityMain.classList.add("Medium");
+    } else {
+      priorityMain.classList.add("Low");
+    }
 
     todoList.appendChild(listItem);
   });
@@ -117,25 +122,15 @@ projectSelect.addEventListener("change", () => {
   renderTasks();
 });
 
-addChecklistItemBtn.addEventListener("click", () => {
-  const itemText = checklistItemInput.value.trim();
-  if (itemText) {
-    checklistItems.push(itemText);
-    const listItem = document.createElement("li");
-    listItem.textContent = itemText;
-    checklist.appendChild(listItem);
-    checklistItemInput.value = "";
-  }
-});
-
 addBtn.addEventListener("click", () => {
+  if (titleInput.value === "") {
+    alert("You didn't add any task");
+  }
   const task = {
     title: titleInput.value.trim(),
     description: descriptionInput.value.trim(),
     dueDate: dueDateInput.value,
     priority: priorityInput.value,
-    notes: notesInput.value.trim(),
-    checklist: [...checklistItems],
     status: "Pending",
     creationDate: new Date().toISOString().split("T")[0],
   };
@@ -145,11 +140,11 @@ addBtn.addEventListener("click", () => {
     descriptionInput.value = "";
     dueDateInput.value = "";
     priorityInput.value = "Low";
-    notesInput.value = "";
-    checklistItems = [];
-    checklist.innerHTML = "";
     renderTasks();
   }
+
+  addTodoD.classList.add("hide");
+  newTBtn.classList.remove("hide");
 });
 
 function openEditModal(task) {
@@ -157,14 +152,6 @@ function openEditModal(task) {
   editDescriptionInput.value = task.description;
   editDueDateInput.value = task.dueDate;
   editPriorityInput.value = task.priority;
-  editNotesInput.value = task.notes;
-  editChecklistItems = [...task.checklist];
-  editChecklist.innerHTML = "";
-  editChecklistItems.forEach((item) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = item;
-    editChecklist.appendChild(listItem);
-  });
   modal.style.display = "block";
 }
 
@@ -178,29 +165,21 @@ window.addEventListener("click", (event) => {
   }
 });
 
-editAddChecklistItemBtn.addEventListener("click", () => {
-  const itemText = editChecklistItemInput.value.trim();
-  if (itemText) {
-    editChecklistItems.push(itemText);
-    const listItem = document.createElement("li");
-    listItem.textContent = itemText;
-    editChecklist.appendChild(listItem);
-    editChecklistItemInput.value = "";
-  }
-});
-
 saveBtn.addEventListener("click", () => {
   const updatedTask = {
     title: editTitleInput.value.trim(),
     description: editDescriptionInput.value.trim(),
     dueDate: editDueDateInput.value,
     priority: editPriorityInput.value,
-    notes: editNotesInput.value.trim(),
-    checklist: [...editChecklistItems],
     status: "Pending",
     creationDate: getTodoByIndex(currentEditIndex).creationDate,
   };
   updateTodo(currentEditIndex, updatedTask);
   modal.style.display = "none";
   renderTasks();
+});
+
+newTBtn.addEventListener("click", () => {
+  addTodoD.classList.remove("hide");
+  newTBtn.classList.add("hide");
 });

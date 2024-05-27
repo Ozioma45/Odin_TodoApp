@@ -18,11 +18,12 @@
             placeholder="New project name" />
           <button id="add-project-btn">Add Project</button>
         </div>
+        <h1>Project List</h1>
         <ul id="project-list"></ul>
       </div>
       <div class="main">
         <h2 id="current-project-title">Default</h2>
-        <div class="add-todo hide">
+        <div id="add-todo" class="add-todo hide">
           <input type="text" id="title-input" placeholder="Task title" />
           <textarea
             id="description-input"
@@ -33,15 +34,6 @@
             <option value="Medium">Medium</option>
             <option value="High">High</option>
           </select>
-          <textarea id="notes-input" placeholder="Additional notes"></textarea>
-          <div id="checklist-container">
-            <input
-              type="text"
-              id="checklist-item-input"
-              placeholder="Add checklist item" />
-            <button id="add-checklist-item-btn">Add Checklist Item</button>
-            <ul id="checklist"></ul>
-          </div>
           <button id="add-btn">Add Task</button>
         </div>
         <ul id="todo-list"></ul>
@@ -63,17 +55,6 @@
           <option value="Medium">Medium</option>
           <option value="High">High</option>
         </select>
-        <textarea
-          id="edit-notes-input"
-          placeholder="Additional notes"></textarea>
-        <div id="edit-checklist-container">
-          <input
-            type="text"
-            id="edit-checklist-item-input"
-            placeholder="Add checklist item" />
-          <button id="edit-add-checklist-item-btn">Add Checklist Item</button>
-          <ul id="edit-checklist"></ul>
-        </div>
         <button id="save-btn">Save Changes</button>
       </div>
     </div>
